@@ -1,0 +1,42 @@
+﻿@using UniversityExplorer.Models
+
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+
+        <h5 class="card-title">
+            @University.UniversityName
+        </h5>
+
+        <p>
+            <strong>Country:</strong> @University.Country
+        </p>
+
+        <p>
+            <strong>Website:</strong>
+            <a href="@University.Website"
+               target="_blank"
+               rel="noopener noreferrer">
+                Visit Website
+            </a>
+        </p>
+
+        <button class="btn btn-primary"
+                @onclick="SelectUniversity">
+            View Details
+        </button>
+
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public University University { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<University> OnSelect { get; set; }
+
+    private async Task SelectUniversity()
+    {
+        await OnSelect.InvokeAsync(University);
+    }
+}

@@ -1,0 +1,109 @@
+﻿@page "/student-applications/edit/{Id:int}"
+
+@using UniversityExplorer.Models
+@using UniversityExplorer.Services
+@using UniversityExplorer.Components
+
+@inject StudentApplicationService ApplicationService
+@inject NavigationManager Navigation
+
+<PageTitle>Edit Student Application</PageTitle>
+
+<div class="container mt-4">
+
+    <h1>Edit Student Application</h1>
+
+    @if (isLoading)
+    {
+        <p>Loading application...</p>
+    }
+    else if (hasError)
+    {
+        <div class="alert alert-danger">
+            Unable to load application.
+        </div>
+    }
+    else if (application == null)
+    {
+        <div class="alert alert-warning">
+            Application not found.
+        </div>
+    }
+    else
+    {
+        <StudentApplicationForm
+    Application="application"
+    OnSubmit="UpdateApplication"
+    ButtonText="Update Application" />
+
+        @if (updateError)
+        {
+            <div class="alert alert-danger mt-3">
+                Unable to update application.
+            </div>
+        }
+
+        <a href="/student-applications"
+           class="btn btn-secondary mt-3">
+            Back to Applications
+        </a>
+    }
+
+</div>
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    private StudentApplication? application;
+
+    private bool isLoading = true;
+    private bool hasError = false;
+    private bool updateError = false;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        isLoading = true;
+        hasError = false;
+
+        try
+        {
+            application =
+                await ApplicationService.GetApplicationByIdAsync(Id);
+        }
+        catch
+        {
+            hasError = true;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task UpdateApplication(
+        StudentApplication updatedApplication)
+    {
+        updateError = false;
+
+        try
+        {
+            bool success = await ApplicationService
+                .UpdateApplicationAsync(updatedApplication);
+
+            if (success)
+            {
+                Navigation.NavigateTo("/student-applications");
+            }
+            else
+            {
+                updateError = true;
+            }
+        }
+        catch
+        {
+            updateError = true;
+        }
+    }
+}

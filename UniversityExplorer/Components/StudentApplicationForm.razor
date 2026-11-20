@@ -1,0 +1,81 @@
+﻿@using UniversityExplorer.Models
+
+<EditForm Model="@Application" OnValidSubmit="HandleSubmit">
+
+    <DataAnnotationsValidator />
+
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label class="form-label">Student Name</label>
+
+        <InputText class="form-control"
+                   @bind-Value="Application.StudentName" />
+
+        <ValidationMessage For="@(() => Application.StudentName)" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+
+        <InputText class="form-control"
+                   @bind-Value="Application.Email" />
+
+        <ValidationMessage For="@(() => Application.Email)" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Country</label>
+
+        <InputText class="form-control"
+                   @bind-Value="Application.Country" />
+
+        <ValidationMessage For="@(() => Application.Country)" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">University</label>
+
+        <InputText class="form-control"
+                   @bind-Value="Application.University" />
+
+        <ValidationMessage For="@(() => Application.University)" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Course</label>
+
+        <InputText class="form-control"
+                   @bind-Value="Application.Course" />
+
+        <ValidationMessage For="@(() => Application.Course)" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Personal Statement</label>
+
+        <InputTextArea class="form-control"
+                       @bind-Value="Application.PersonalStatement" />
+    </div>
+
+   <button type="submit" class="btn btn-success">
+    @ButtonText
+</button>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public string ButtonText { get; set; } = "Save Application";
+
+    [Parameter]
+    public StudentApplication Application { get; set; } = new();
+
+    [Parameter]
+    public EventCallback<StudentApplication> OnSubmit { get; set; }
+
+    private async Task HandleSubmit()
+    {
+        await OnSubmit.InvokeAsync(Application);
+    }
+}

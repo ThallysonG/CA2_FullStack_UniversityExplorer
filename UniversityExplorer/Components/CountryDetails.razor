@@ -1,0 +1,35 @@
+﻿@using UniversityExplorer.Models
+
+<div class="card shadow-sm mt-4">
+    <div class="card-header">
+        <h4>Country Details</h4>
+    </div>
+
+    <div class="card-body">
+
+        <h5>@Country.CountryName</h5>
+
+        <p>
+            <strong>Capital:</strong> @Country.Capital
+        </p>
+
+        <p>
+            <strong>Region:</strong> @Country.Region
+        </p>
+
+        <p>
+            <strong>Population:</strong>
+            @Country.Population.ToString("N0")
+        </p>
+
+        <p>
+            <strong>Flag:</strong> @Country.Flag
+        </p>
+
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Country Country { get; set; } = new();
+}

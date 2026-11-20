@@ -1,0 +1,76 @@
+﻿@page "/student-applications/create"
+
+@using UniversityExplorer.Models
+@using UniversityExplorer.Services
+@using UniversityExplorer.Components
+
+@inject StudentApplicationService ApplicationService
+
+<PageTitle>Create Student Application</PageTitle>
+
+<div class="container mt-4">
+
+    <h1>Create Student Application</h1>
+
+    <p>Complete the form to submit a university application.</p>
+
+    @if (isSuccess)
+    {
+        <div class="alert alert-success">
+            Application submitted successfully!
+        </div>
+    }
+
+    @if (hasError)
+    {
+        <div class="alert alert-danger">
+            Unable to submit application.
+        </div>
+    }
+
+    <StudentApplicationForm
+    Application="application"
+    OnSubmit="CreateApplication"
+    ButtonText="Create Application" />
+
+    <a href="/student-applications"
+       class="btn btn-secondary mt-3">
+        Back to Applications
+    </a>
+
+</div>
+
+@code {
+
+    private StudentApplication application = new();
+
+    private bool isSuccess = false;
+
+    private bool hasError = false;
+
+    private async Task CreateApplication(
+        StudentApplication studentApplication)
+    {
+        isSuccess = false;
+        hasError = false;
+
+        try
+        {
+            isSuccess = await ApplicationService
+                .CreateApplicationAsync(studentApplication);
+
+            if (isSuccess)
+            {
+                application = new StudentApplication();
+            }
+            else
+            {
+                hasError = true;
+            }
+        }
+        catch
+        {
+            hasError = true;
+        }
+    }
+}
